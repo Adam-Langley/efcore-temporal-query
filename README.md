@@ -1,26 +1,28 @@
 # efcore-temporal-query
 
-Linq extensions to Entity Framework Core 3.1 to support Microsoft SQL Server Temporal Table Querying
+Linq extensions to Entity Framework Core 3.1 to support [Microsoft SQL Server Temporal Table](https://docs.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables) querying.
 
-Note: This library does not facilitate the creation of temporal table schemas (such as through Ef migrations).
-It's suggested that you use another library, such as [EntityFrameworkCore.TemporalTables](https://github.com/findulov/EntityFrameworkCore.TemporalTables).
+*Note: This library does not facilitate schema modification (such as through EF migrations).
+That capability can be supplemented through other libraries, such as [EntityFrameworkCore.TemporalTables](https://github.com/findulov/EntityFrameworkCore.TemporalTables).*
 
 # Installation
 [![NuGet](https://img.shields.io/nuget/v/Dabble.EntityFrameworkCore.Temporal.Query.svg)](https://www.nuget.org/packages/Dabble.EntityFrameworkCore.Temporal.Query/)
 
 # Getting Started...
-The extension methods you will be using have been placed in the 'Microsoft.EntityFrameworkCore' namespace
-to assist in dicoverability.
+The new extension methods you will be using have been placed in the `Microsoft.EntityFrameworkCore` namespace
+to assist with discoverability.
 
-Following are the 3 manditory steps to querying Microft SQL Server Temporal Tables.
+Following are the 3 mandatory steps to querying Microft SQL Server Temporal Tables.
 
 
 ## 1. Entity Configuration
 
-This 'marks' these entities as candidates for the "FOR SYSTEM TIME" syntax - this ensures
-that the query compiler does not apply this syntax to tables that do not support it.
+Use the `x.HasTemporalTable()` extension method to mark your desired entities as candidates for the `FOR SYSTEM TIME` (a.k.a temporal) syntax.
+This step alone will not cause the temporal SQL to be generated.
+The reason being - when applying a temporal time to a linq query, it will cause the temporal syntax to be applied to all compatible tables in that query.
+This 'opt in' mechanism allows you to ensure that the query compiler does _not_ apply the syntax to tables that do not support it.
 
-```
+```csharp
 using Microsoft.EntityFrameworkCore;
 
 ...
@@ -37,9 +39,9 @@ modelBuilder.Entity<Address>(b => {
 
 ## 2. DbContext Initialization
 
-This replaces the necessary EF pipeline services to produce the new SQL syntax.
+Use the `EnableTemporalTableQueries()` extension to replace the necessary EF pipeline services responsible for generating the SQL syntax at runtime.
 
-```
+```csharp
 using Microsoft.EntityFrameworkCore;
 
 ...
@@ -56,9 +58,12 @@ public static void Configure(DbContextOptionsBuilder<DbContext> builder, string 
 
 The following is an example of querying a customer record from a Temporal Table at a specific
 time, including an Address record from that same time.
+
+The temporal state is applied to the entire query, meaning the extension method need only be called once (anywhere in the fluent statement).
+
 All joined relationships will have the "FOR SYSTEM_TIME" predicate applied to the generated SQL.
 
-```
+```csharp
 using Microsoft.EntityFrameworkCore;
 
 ...
@@ -76,7 +81,7 @@ var yesterdaysCustomerRecord = _db.Customers
 
 Resulting SQL (pseudo-example for demonstrative purposes)
 
-```
+```sql
 SELECT * FROM Customer FOR SYSTEM TIME AS OF @p0 c 
 LEFT JOIN 
 Address FOR SYSTEM TIME AS OF @p0 a 
@@ -85,7 +90,7 @@ ON c.Id = a.CustomerId
 
 ## 4. Roadmap Features
 1. Runtime per-join configuration, e.g.
-```
+```csharp
 var yesterdaysCustomerRecordWithTodaysAddress = _db.Customers
                                     .AsOf(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
                                     .IncludeAsOfNow(x => x.Address);
