@@ -65,7 +65,13 @@ using Microsoft.EntityFrameworkCore;
 
 var yesterdaysCustomerRecord = _db.Customers
                                     .Include(x => x.Address)
+                                    .AsOf(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)));
+                                    
+// or place the 'AsOf' first if you prefer
+var yesterdaysCustomerRecord = _db.Customers
                                     .AsOf(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
+                                    .Include(x => x.Address);
+
 ```
 
 Resulting SQL (pseudo-example for demonstrative purposes)
@@ -75,4 +81,18 @@ SELECT * FROM Customer FOR SYSTEM TIME AS OF '2020-02-28T11:00:00' c
 LEFT JOIN 
 Address FOR SYSTEM TIME AS OF '2020-02-28T11:00:00' a 
 ON c.Id = a.CustomerId
+```
+
+## 4. Roadmap Features
+1. Runtime per-join configuration, e.g.
+```
+var yesterdaysCustomerRecordWithTodaysAddress = _db.Customers
+                                    .AsOf(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
+                                    .IncludeAsOfNow(x => x.Address);
+                                    
+
+var yesterdaysCustomerRecordWithAnOlderAddress = _db.Customers
+                                    .AsOf(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
+                                    .IncludeAsOf(x => x.Address, DateTime.UtcNow.Subtract(TimeSpan.FromHours(1)));
+                                    
 ```
