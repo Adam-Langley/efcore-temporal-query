@@ -77,9 +77,9 @@ var yesterdaysCustomerRecord = _db.Customers
 Resulting SQL (pseudo-example for demonstrative purposes)
 
 ```
-SELECT * FROM Customer FOR SYSTEM TIME AS OF '2020-02-28T11:00:00' c 
+SELECT * FROM Customer FOR SYSTEM TIME AS OF @p0 c 
 LEFT JOIN 
-Address FOR SYSTEM TIME AS OF '2020-02-28T11:00:00' a 
+Address FOR SYSTEM TIME AS OF @p0 a 
 ON c.Id = a.CustomerId
 ```
 
