@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>Dabble.EntityFrameworkCore.Temporal.Query</AssemblyName>
+    <RootNamespace>Microsoft.EntityFrameworkCore.Temporal.Query</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0</Version>
+    <Authors>Adam Langley</Authors>
+    <Company>Adam Langley</Company>
+    <PackageId>Dabble.EntityFrameworkCore.Temporal.Query</PackageId>
+    <Description>Linq extensions to Entity Framework Core 3.1 to support Microsoft SQL Server Temporal Table Querying.
+
+*** Does not perform Migrations, but ensure that Linq queries correctly propagate "FOR SYSTEM_TIME" across all joined tables ***
+
+Icons made by Smashicons
+https://www.flaticon.com/authors/smashicons</Description>
+    <PackageProjectUrl>https://github.com/Adam-Langley/efcore-temporal-query</PackageProjectUrl>
+    
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/Adam-Langley/efcore-temporal-query</RepositoryUrl>
+    <PackageTags>entityframeworkcore sqlserver temporaltables</PackageTags>
+    <PackageIcon>tardis.png</PackageIcon>
+    <Product>EntityFrameworkCore Temporal Query</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="tardis.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="ContentFiles/Readme.txt" pack="true" PackagePath="." />
+  </ItemGroup>
+
+</Project>
