@@ -39,7 +39,7 @@ modelBuilder.Entity<Address>(b => {
 
 ## 2. DbContext Initialization
 
-Use the `EnableTemporalTableQueries()` extension to replace the necessary EF pipeline services responsible for generating the SQL syntax at runtime.
+Use the `x.EnableTemporalTableQueries()` extension to replace the necessary EF pipeline services responsible for generating the SQL syntax at runtime.
 
 ```csharp
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +55,8 @@ public static void Configure(DbContextOptionsBuilder<DbContext> builder, string 
 ```
 
 ## 3. Querying
+
+Use the `IQueryable<T>.AsOf(DateTime)` extension to specialize a linq expression to a particular point in time.
 
 The following is an example of querying a customer record from a Temporal Table at a specific
 time, including an Address record from that same time.
