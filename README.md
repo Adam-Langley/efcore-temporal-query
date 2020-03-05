@@ -48,7 +48,7 @@ public static void Configure(DbContextOptionsBuilder<DbContext> builder, string 
 {
     builder
         .UseSqlServer(connectionString)
-        .EnableTemporalTableQueries(); // here we enable temporal tables inthe EF query pipeline
+        .EnableTemporalTableQueries(); // here we enable the temporal table sql generator
 }
 ```
 
