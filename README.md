@@ -61,7 +61,7 @@ time, including an Address record from that same time.
 
 The temporal state is applied to the entire query, meaning the extension method need only be called once (anywhere in the fluent statement).
 
-All joined relationships will have the "FOR SYSTEM_TIME" predicate applied to the generated SQL.
+All joined relationships will have the `FOR SYSTEM_TIME` predicate applied to the generated SQL.
 
 ```csharp
 using Microsoft.EntityFrameworkCore;
