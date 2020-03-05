@@ -8,8 +8,6 @@ It's suggested that you use another library, such as [EntityFrameworkCore.Tempor
 # Installation
 [![NuGet](https://img.shields.io/nuget/v/Dabble.EntityFrameworkCore.Temporal.Query.svg)](https://www.nuget.org/packages/Dabble.EntityFrameworkCore.Temporal.Query/)
 
-https://www.nuget.org/packages/Dabble.EntityFrameworkCore.Temporal.Query/
-
 # Getting Started...
 The extension methods you will be using have been placed in the 'Microsoft.EntityFrameworkCore' namespace
 to assist in dicoverability.
