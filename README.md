@@ -56,7 +56,7 @@ public static void Configure(DbContextOptionsBuilder<DbContext> builder, string 
 
 The following is an example of querying a customer record from a Temporal Table at a specific
 time, including an Address record from that same time.
-All joined/projected relationships will have the "FOR SYSTEM_TIME" predicate applied to the generated SQL.
+All joined relationships will have the "FOR SYSTEM_TIME" predicate applied to the generated SQL.
 
 ```
 using Microsoft.EntityFrameworkCore;
