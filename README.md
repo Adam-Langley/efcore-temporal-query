@@ -88,7 +88,7 @@ Address FOR SYSTEM TIME AS OF @p0 a
 ON c.Id = a.CustomerId
 ```
 
-## 4. Roadmap Features
+# Roadmap Features
 1. Runtime per-join configuration, e.g.
 ```csharp
 var yesterdaysCustomerRecordWithTodaysAddress = _db.Customers
