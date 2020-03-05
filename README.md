@@ -2,7 +2,7 @@
 
 Linq extensions to Entity Framework Core 3.1 to support [Microsoft SQL Server Temporal Table](https://docs.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables) querying.
 
-*Note: This library does not facilitate schema modification (such as through EF migrations).
+*Note: This library does not facilitate schema alteration (such as through EF migrations).
 That capability can be supplemented through other libraries, such as [EntityFrameworkCore.TemporalTables](https://github.com/findulov/EntityFrameworkCore.TemporalTables).*
 
 # Installation
