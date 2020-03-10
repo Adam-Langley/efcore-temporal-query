@@ -16,9 +16,9 @@ namespace Microsoft.EntityFrameworkCore.Temporal.Query.Extensions.Internal
             if (shapedQuery.QueryExpression is SelectExpression outerSelect)
             {
                 foreach (var table in outerSelect.Tables.OfType<AsOfTableExpression>())
-                    if (null != table.DateParameter)
+                    if (null != table.AsOfDate)
                     {
-                        dateParameter = table.DateParameter;
+                        dateParameter = table.AsOfDate;
                         return true;
                     }
             }
@@ -32,9 +32,9 @@ namespace Microsoft.EntityFrameworkCore.Temporal.Query.Extensions.Internal
             {
                 foreach (var table in select.Tables.OfType<AsOfTableExpression>())
                 {
-                    if (null == table.DateParameter)
+                    if (null == table.AsOfDate)
                     {
-                        table.DateParameter = dateParameter;
+                        table.AsOfDate = dateParameter;
                         return true;
                     }
                 }

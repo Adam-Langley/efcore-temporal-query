@@ -12,6 +12,13 @@ namespace Microsoft.EntityFrameworkCore
         public static readonly MethodInfo AsOfMethodInfo
           = typeof(SqlServerQueryableExtensions).GetTypeInfo().GetDeclaredMethod(nameof(AsOf));
 
+        /// <summary>
+        /// Configure a query to constrain all temporal tables to a specific time
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public static IQueryable<TEntity> AsOf<TEntity>(this IQueryable<TEntity> source, DateTime date) where TEntity : class
         {
             return

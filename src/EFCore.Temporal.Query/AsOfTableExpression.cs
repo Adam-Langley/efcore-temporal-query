@@ -6,11 +6,18 @@ using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.TemporalTables.Query
 {
+    /// <summary>
+    /// A derived implementation of TableExpressionBase which allows us to attach some meta-data to
+    /// the TableExpressionBase - namely the "AsOfDate" property.
+    /// </summary>
     public class AsOfTableExpression : TableExpressionBase
     {
         public string Name { get; }
         public string Schema { get; }
-        public ParameterExpression DateParameter { get; set; }
+        /// <summary>
+        /// Gets and sets the parameter used to constrain a query to a specific temporal period.
+        /// </summary>
+        public ParameterExpression AsOfDate { get; set; }
 
         public AsOfTableExpression(string name, string schema, string alias) : base(alias)
         {

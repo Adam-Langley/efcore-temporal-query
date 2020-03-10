@@ -9,6 +9,12 @@ using Microsoft.EntityFrameworkCore.Temporal.Query.Extensions.Internal;
 
 namespace EntityFrameworkCore.TemporalTables.Query
 {
+    /// <summary>
+    /// This class is responsible for traversing the Linq query extension methods, searching for any
+    /// calls to the "AsOf" extension.
+    /// When it encounters them, it will process the expressions they are attached to, and find any "AsOfTableExpression" instances,
+    /// then set the "AsOfDate" property of those tables.
+    /// </summary>
     public class AsOfQueryableMethodTranslatingExpressionVisitor : RelationalQueryableMethodTranslatingExpressionVisitor
     {
         private readonly QueryableMethodTranslatingExpressionVisitorDependencies _dependencies;
@@ -45,6 +51,7 @@ namespace EntityFrameworkCore.TemporalTables.Query
         protected override ShapedQueryExpression TranslateGroupJoin(ShapedQueryExpression outer, ShapedQueryExpression inner, LambdaExpression outerKeySelector, LambdaExpression innerKeySelector, LambdaExpression resultSelector)
         {
             ParameterExpression asOfParameter = null;
+
             if (outer.TryGetDateParameter(out asOfParameter))
             {
                 inner.TrySetDateParameter(asOfParameter);
@@ -56,6 +63,7 @@ namespace EntityFrameworkCore.TemporalTables.Query
         protected override ShapedQueryExpression TranslateJoin(ShapedQueryExpression outer, ShapedQueryExpression inner, LambdaExpression outerKeySelector, LambdaExpression innerKeySelector, LambdaExpression resultSelector)
         {
             ParameterExpression asOfParameter = null;
+
             if (inner.TryGetDateParameter(out asOfParameter))
             {
                 outer.TrySetDateParameter(asOfParameter);
@@ -66,23 +74,24 @@ namespace EntityFrameworkCore.TemporalTables.Query
 
         protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
         {
-            var method = methodCallExpression.Method;
-            if (method.DeclaringType == typeof(SqlServerQueryableExtensions))
+            var methodInfo = methodCallExpression.Method;
+
+            if (methodInfo.DeclaringType == typeof(SqlServerQueryableExtensions))
             {
-                switch (method.Name)
+                switch (methodInfo.Name)
                 {
                     case nameof(SqlServerQueryableExtensions.AsOf):
                         // create an expression....
                         // store expression path
                         var source = Visit(methodCallExpression.Arguments[0]);
-                        var dateParameter = Visit(methodCallExpression.Arguments[1]) as ParameterExpression;
                         if (source is ShapedQueryExpression shaped)
                         {
                             if (shaped.QueryExpression is SelectExpression select)
                             {
+                                var dateParameter = Visit(methodCallExpression.Arguments[1]) as ParameterExpression;
                                 foreach (AsOfTableExpression asOfTable in select.Tables.OfType<AsOfTableExpression>())
                                 {
-                                    asOfTable.DateParameter = dateParameter;
+                                    asOfTable.AsOfDate = dateParameter;
                                 }
                             }
                         }
