@@ -5,7 +5,7 @@
     <AssemblyName>Dabble.EntityFrameworkCore.Temporal.Query</AssemblyName>
     <RootNamespace>Microsoft.EntityFrameworkCore.Temporal.Query</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Adam Langley</Authors>
     <Company>Adam Langley</Company>
     <PackageId>Dabble.EntityFrameworkCore.Temporal.Query</PackageId>
