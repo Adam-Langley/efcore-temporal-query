@@ -41,6 +41,8 @@ modelBuilder.Entity<Address>(b => {
 
 Use the `x.EnableTemporalTableQueries()` extension to replace the necessary EF pipeline services responsible for generating the SQL syntax at runtime.
 
+*IMPORTANT* - `efcore-temporal-query` does not support EF internal service providers (user supplied ones). If you are following these instructions, and temporal SQL is not being generated, please check you are not calling `DbContextOptionsBuilder.UseInternalServiceProvider` somewhere in your code.
+
 ```csharp
 using Microsoft.EntityFrameworkCore;
 
