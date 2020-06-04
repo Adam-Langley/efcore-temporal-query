@@ -1,4 +1,5 @@
-﻿using EntityFrameworkCore.TemporalTables.Query;
+﻿using System;
+using EntityFrameworkCore.TemporalTables.Query;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Query;
@@ -18,6 +19,11 @@ namespace Microsoft.EntityFrameworkCore
 
         public static DbContextOptionsBuilder<TContext> EnableTemporalTableQueries<TContext>(this DbContextOptionsBuilder<TContext> optionsBuilder) where TContext : DbContext
         {
+            if (optionsBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(optionsBuilder));
+            }
+
             // If service provision is NOT being performed internally, we cannot replace services.
             var coreOptions = optionsBuilder.Options.GetExtension<CoreOptionsExtension>();
             if (coreOptions.InternalServiceProvider == null)

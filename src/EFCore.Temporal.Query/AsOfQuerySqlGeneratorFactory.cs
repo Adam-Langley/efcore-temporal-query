@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 
 namespace EntityFrameworkCore.TemporalTables.Query
@@ -14,8 +15,8 @@ namespace EntityFrameworkCore.TemporalTables.Query
             QuerySqlGeneratorDependencies dependencies,
             ISqlServerOptions sqlServerOptions)
         {
-            _dependencies = dependencies;
-            _sqlServerOptions = sqlServerOptions;
+            _dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
+            _sqlServerOptions = sqlServerOptions ?? throw new ArgumentNullException(nameof(sqlServerOptions));
         }
 
         public QuerySqlGenerator Create()
