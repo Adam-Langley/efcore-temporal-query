@@ -11,21 +11,6 @@ namespace Microsoft.EntityFrameworkCore.Temporal.Query.Extensions.Internal
 {
     public static class ExpressionExtensions
     {
-        public static bool TryGetDateParameter(this ShapedQueryExpression shapedQuery, out ParameterExpression dateParameter)
-        {
-            if (shapedQuery.QueryExpression is SelectExpression outerSelect)
-            {
-                foreach (var table in outerSelect.Tables.OfType<AsOfTableExpression>())
-                    if (null != table.AsOfDate)
-                    {
-                        dateParameter = table.AsOfDate;
-                        return true;
-                    }
-            }
-            dateParameter = null;
-            return false;
-        }
-    
         public static bool TrySetDateParameter(this ShapedQueryExpression shapedQuery, ParameterExpression dateParameter)
         {
             if (shapedQuery.QueryExpression is SelectExpression select)
