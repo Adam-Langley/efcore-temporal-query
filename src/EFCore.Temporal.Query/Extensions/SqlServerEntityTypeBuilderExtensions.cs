@@ -1,9 +1,8 @@
-﻿using System;
 using EntityFrameworkCore.TemporalTables.Query;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Query;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.EntityFrameworkCore
 {
@@ -17,13 +16,8 @@ namespace Microsoft.EntityFrameworkCore
             return entity;
         }
 
-        public static DbContextOptionsBuilder<TContext> EnableTemporalTableQueries<TContext>(this DbContextOptionsBuilder<TContext> optionsBuilder) where TContext : DbContext
+        public static DbContextOptionsBuilder EnableTemporalTableQueries([NotNull] this DbContextOptionsBuilder optionsBuilder)
         {
-            if (optionsBuilder == null)
-            {
-                throw new ArgumentNullException(nameof(optionsBuilder));
-            }
-
             // If service provision is NOT being performed internally, we cannot replace services.
             var coreOptions = optionsBuilder.Options.GetExtension<CoreOptionsExtension>();
             if (coreOptions.InternalServiceProvider == null)

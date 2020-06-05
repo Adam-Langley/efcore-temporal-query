@@ -1,4 +1,4 @@
-﻿using System;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 
@@ -12,11 +12,11 @@ namespace EntityFrameworkCore.TemporalTables.Query
         private readonly QueryCompilationContext _queryCompilationContext;
 
         public AsOfQuerySqlGeneratorFactory(
-            QuerySqlGeneratorDependencies dependencies,
-            ISqlServerOptions sqlServerOptions)
+            [NotNull] QuerySqlGeneratorDependencies dependencies,
+            [NotNull] ISqlServerOptions sqlServerOptions)
         {
-            _dependencies = dependencies ?? throw new ArgumentNullException(nameof(dependencies));
-            _sqlServerOptions = sqlServerOptions ?? throw new ArgumentNullException(nameof(sqlServerOptions));
+            _dependencies = dependencies;
+            _sqlServerOptions = sqlServerOptions;
         }
 
         public QuerySqlGenerator Create()
