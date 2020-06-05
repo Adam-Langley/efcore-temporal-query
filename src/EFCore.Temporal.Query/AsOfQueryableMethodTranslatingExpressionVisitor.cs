@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Temporal.Query.Extensions.Internal;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.TemporalTables.Query
@@ -14,11 +15,20 @@ namespace EntityFrameworkCore.TemporalTables.Query
     /// </summary>
     public class AsOfQueryableMethodTranslatingExpressionVisitor : RelationalQueryableMethodTranslatingExpressionVisitor
     {
-        private readonly QueryableMethodTranslatingExpressionVisitorDependencies _dependencies;
         private readonly RelationalQueryableMethodTranslatingExpressionVisitorDependencies _relationalDependencies;
+        private readonly QueryCompilationContext _queryCompilationContext;
         private readonly IModel _model;
         private readonly ISqlExpressionFactory _sqlExpressionFactory;
         private ParameterExpression _asOfDateParameter;
+
+        protected AsOfQueryableMethodTranslatingExpressionVisitor(
+            [NotNull] AsOfQueryableMethodTranslatingExpressionVisitor parentVisitor)
+            : base(parentVisitor)
+        {
+            _queryCompilationContext = parentVisitor._queryCompilationContext;
+            _sqlExpressionFactory = parentVisitor._sqlExpressionFactory;
+            _asOfDateParameter = parentVisitor._asOfDateParameter;
+        }
 
         public AsOfQueryableMethodTranslatingExpressionVisitor(
             QueryableMethodTranslatingExpressionVisitorDependencies dependencies,
@@ -27,7 +37,6 @@ namespace EntityFrameworkCore.TemporalTables.Query
             ParameterExpression asOfDateParameter = null
             ) : base(dependencies, relationalDependencies, model)
         {
-            _dependencies = dependencies;
             _relationalDependencies = relationalDependencies;
             _model = model;
             _asOfDateParameter = asOfDateParameter;
@@ -48,21 +57,13 @@ namespace EntityFrameworkCore.TemporalTables.Query
         }
 
         protected override QueryableMethodTranslatingExpressionVisitor CreateSubqueryVisitor()
-        {
-            return new AsOfQueryableMethodTranslatingExpressionVisitor(
-                _dependencies,
-                _relationalDependencies,
-                _model,
-                _asOfDateParameter);
-        }
+            => new AsOfQueryableMethodTranslatingExpressionVisitor(this);
 
         protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
         {
-            var methodInfo = methodCallExpression.Method;
-
-            if (methodInfo.DeclaringType == typeof(SqlServerQueryableExtensions))
+            if (methodCallExpression.Method.DeclaringType == typeof(SqlServerQueryableExtensions))
             {
-                switch (methodInfo.Name)
+                switch (methodCallExpression.Method.Name)
                 {
                     case nameof(SqlServerQueryableExtensions.AsOf):
                         // capture the date parameter for use by all AsOfTableExpression instances
