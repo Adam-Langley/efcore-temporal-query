@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
-using System.Diagnostics.CodeAnalysis;
 
 namespace EntityFrameworkCore.TemporalTables.Query
 {

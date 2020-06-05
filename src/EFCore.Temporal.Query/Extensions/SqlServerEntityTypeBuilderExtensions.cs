@@ -1,8 +1,8 @@
-﻿using EntityFrameworkCore.TemporalTables.Query;
+using EntityFrameworkCore.TemporalTables.Query;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Query;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.EntityFrameworkCore
 {
