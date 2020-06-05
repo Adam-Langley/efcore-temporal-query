@@ -21,55 +21,42 @@ namespace EntityFrameworkCore.TemporalTables.Query
         private readonly RelationalQueryableMethodTranslatingExpressionVisitorDependencies _relationalDependencies;
         private readonly IModel _model;
         private readonly ISqlExpressionFactory _sqlExpressionFactory;
+        private ParameterExpression _asOfDateParameter;
 
         public AsOfQueryableMethodTranslatingExpressionVisitor(
             QueryableMethodTranslatingExpressionVisitorDependencies dependencies,
             RelationalQueryableMethodTranslatingExpressionVisitorDependencies relationalDependencies,
-            IModel model
+            IModel model,
+            ParameterExpression asOfDateParameter = null
             ) : base(dependencies, relationalDependencies, model)
         {
             _dependencies = dependencies;
             _relationalDependencies = relationalDependencies;
             _model = model;
+            _asOfDateParameter = asOfDateParameter;
 
             var sqlExpressionFactory = relationalDependencies.SqlExpressionFactory;
             _sqlExpressionFactory = sqlExpressionFactory;
         }
 
-        protected override ShapedQueryExpression TranslateLeftJoin(ShapedQueryExpression outer, ShapedQueryExpression inner, LambdaExpression outerKeySelector, LambdaExpression innerKeySelector, LambdaExpression resultSelector)
+        protected override Expression VisitConstant(ConstantExpression constantExpression)
         {
-            ParameterExpression asOfParameter = null;
-
-            if (outer.TryGetDateParameter(out asOfParameter))
+            var result = base.VisitConstant(constantExpression);
+            if (null != _asOfDateParameter && result is ShapedQueryExpression shapedExpression)
             {
-                inner.TrySetDateParameter(asOfParameter);
+                // attempt to apply the captured date parameter to any select-from-table expressions
+                shapedExpression.TrySetDateParameter(_asOfDateParameter);
             }
-
-            return base.TranslateLeftJoin(outer, inner, outerKeySelector, innerKeySelector, resultSelector);
+            return result;
         }
 
-        protected override ShapedQueryExpression TranslateGroupJoin(ShapedQueryExpression outer, ShapedQueryExpression inner, LambdaExpression outerKeySelector, LambdaExpression innerKeySelector, LambdaExpression resultSelector)
+        protected override QueryableMethodTranslatingExpressionVisitor CreateSubqueryVisitor()
         {
-            ParameterExpression asOfParameter = null;
-
-            if (outer.TryGetDateParameter(out asOfParameter))
-            {
-                inner.TrySetDateParameter(asOfParameter);
-            }           
-
-            return base.TranslateGroupJoin(outer, inner, outerKeySelector, innerKeySelector, resultSelector);
-        }
-
-        protected override ShapedQueryExpression TranslateJoin(ShapedQueryExpression outer, ShapedQueryExpression inner, LambdaExpression outerKeySelector, LambdaExpression innerKeySelector, LambdaExpression resultSelector)
-        {
-            ParameterExpression asOfParameter = null;
-
-            if (inner.TryGetDateParameter(out asOfParameter))
-            {
-                outer.TrySetDateParameter(asOfParameter);
-            }
-
-            return base.TranslateJoin(outer, inner, outerKeySelector, innerKeySelector, resultSelector);
+            return new AsOfQueryableMethodTranslatingExpressionVisitor(
+                _dependencies,
+                _relationalDependencies,
+                _model,
+                _asOfDateParameter);
         }
 
         protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
@@ -81,21 +68,9 @@ namespace EntityFrameworkCore.TemporalTables.Query
                 switch (methodInfo.Name)
                 {
                     case nameof(SqlServerQueryableExtensions.AsOf):
-                        // create an expression....
-                        // store expression path
-                        var source = Visit(methodCallExpression.Arguments[0]);
-                        if (source is ShapedQueryExpression shaped)
-                        {
-                            if (shaped.QueryExpression is SelectExpression select)
-                            {
-                                var dateParameter = Visit(methodCallExpression.Arguments[1]) as ParameterExpression;
-                                foreach (AsOfTableExpression asOfTable in select.Tables.OfType<AsOfTableExpression>())
-                                {
-                                    asOfTable.AsOfDate = dateParameter;
-                                }
-                            }
-                        }
-                        return source;
+                        // capture the date parameter for use by all AsOfTableExpression instances
+                        _asOfDateParameter = Visit(methodCallExpression.Arguments[1]) as ParameterExpression;
+                        return Visit(methodCallExpression.Arguments[0]);
                 }
             }
 

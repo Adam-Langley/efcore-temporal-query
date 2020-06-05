@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Diagnostics.CodeAnalysis;
@@ -38,6 +39,11 @@ namespace EntityFrameworkCore.TemporalTables.Query
             }
 
             return base.VisitExtension(extensionExpression);
+        }
+
+        protected override Expression VisitLeftJoin(LeftJoinExpression leftJoinExpression)
+        {
+            return base.VisitLeftJoin(leftJoinExpression);
         }
 
         protected virtual Expression VisitAsOfTable(AsOfTableExpression tableExpression)
