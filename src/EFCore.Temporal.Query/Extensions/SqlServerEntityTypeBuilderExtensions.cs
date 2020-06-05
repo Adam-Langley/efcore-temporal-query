@@ -16,7 +16,7 @@ namespace Microsoft.EntityFrameworkCore
             return entity;
         }
 
-        public static DbContextOptionsBuilder EnableTemporalTableQueries<TContext>([NotNull] this DbContextOptionsBuilder optionsBuilder)
+        public static DbContextOptionsBuilder EnableTemporalTableQueries([NotNull] this DbContextOptionsBuilder optionsBuilder)
         {
             // If service provision is NOT being performed internally, we cannot replace services.
             var coreOptions = optionsBuilder.Options.GetExtension<CoreOptionsExtension>();
