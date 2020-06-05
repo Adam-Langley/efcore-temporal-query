@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using System;
-using System.Linq;
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Temporal.Query.Extensions.Internal;
+using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.TemporalTables.Query
 {
