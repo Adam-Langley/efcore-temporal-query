@@ -15,7 +15,7 @@ namespace EntityFrameworkCore.TemporalTables.Query
 
         public override SelectExpression Select(IEntityType entityType)
         {
-            if (entityType.FindAnnotation(SqlServerEntityTypeBuilderExtensions.ANNOTATION_TEMPORAL) != null)
+            if (entityType.FindAnnotation(SqlServerAsOfEntityTypeBuilderExtensions.ANNOTATION_TEMPORAL) != null)
             {
                 var asOfTableExpression = new AsOfTableExpression(
                     entityType.GetTableName(),

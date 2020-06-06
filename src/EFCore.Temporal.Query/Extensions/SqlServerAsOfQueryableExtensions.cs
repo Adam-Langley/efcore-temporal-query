@@ -7,10 +7,10 @@ using System.Reflection;
 namespace Microsoft.EntityFrameworkCore
 {
 
-    public static class SqlServerQueryableExtensions
+    public static class SqlServerAsOfQueryableExtensions
     {
         public static readonly MethodInfo AsOfMethodInfo
-          = typeof(SqlServerQueryableExtensions).GetTypeInfo().GetDeclaredMethod(nameof(AsOf));
+          = typeof(SqlServerAsOfQueryableExtensions).GetTypeInfo().GetDeclaredMethod(nameof(AsOf));
 
         /// <summary>
         /// Configure a query to constrain all temporal tables to a specific time

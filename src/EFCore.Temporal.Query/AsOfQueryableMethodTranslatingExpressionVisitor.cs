@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Temporal.Query.Extensions.Internal;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.TemporalTables.Query
@@ -62,11 +61,11 @@ namespace EntityFrameworkCore.TemporalTables.Query
 
         protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
         {
-            if (methodCallExpression.Method.DeclaringType == typeof(SqlServerQueryableExtensions))
+            if (methodCallExpression.Method.DeclaringType == typeof(SqlServerAsOfQueryableExtensions))
             {
                 switch (methodCallExpression.Method.Name)
                 {
-                    case nameof(SqlServerQueryableExtensions.AsOf):
+                    case nameof(SqlServerAsOfQueryableExtensions.AsOf):
                         // capture the date parameter for use by all AsOfTableExpression instances
                         _asOfDateParameter = Visit(methodCallExpression.Arguments[1]) as ParameterExpression;
                         return Visit(methodCallExpression.Arguments[0]);

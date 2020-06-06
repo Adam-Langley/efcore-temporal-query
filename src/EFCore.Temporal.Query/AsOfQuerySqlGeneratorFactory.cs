@@ -1,22 +1,16 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 
 namespace EntityFrameworkCore.TemporalTables.Query
 {
     public class AsOfQuerySqlGeneratorFactory : IQuerySqlGeneratorFactory
     {
-        private readonly IQueryableMethodTranslatingExpressionVisitorFactory _ss;
         private readonly QuerySqlGeneratorDependencies _dependencies;
-        private readonly ISqlServerOptions _sqlServerOptions;
-        private readonly QueryCompilationContext _queryCompilationContext;
 
         public AsOfQuerySqlGeneratorFactory(
-            [NotNull] QuerySqlGeneratorDependencies dependencies,
-            [NotNull] ISqlServerOptions sqlServerOptions)
+            [NotNull] QuerySqlGeneratorDependencies dependencies)
         {
             _dependencies = dependencies;
-            _sqlServerOptions = sqlServerOptions;
         }
 
         public QuerySqlGenerator Create()

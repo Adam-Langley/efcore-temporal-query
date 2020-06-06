@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace Microsoft.EntityFrameworkCore
 {
-    public static class SqlServerEntityTypeBuilderExtensions
+    public static class SqlServerAsOfEntityTypeBuilderExtensions
     {
         public static string ANNOTATION_TEMPORAL = "IS_TEMPORAL_TABLE";
 
