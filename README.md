@@ -9,6 +9,7 @@ That capability can be supplemented through other libraries, such as [EntityFram
 
 # Installation
 [![NuGet](https://img.shields.io/nuget/v/Dabble.EntityFrameworkCore.Temporal.Query.svg)](https://www.nuget.org/packages/Dabble.EntityFrameworkCore.Temporal.Query/)
+[![NuGet](https://img.shields.io/nuget/dt/Dabble.EntityFrameworkCore.Temporal.Query.svg)](https://www.nuget.org/packages/Dabble.EntityFrameworkCore.Temporal.Query/)
 
 # Getting Started...
 The new extension methods you will be using have been placed in the `Microsoft.EntityFrameworkCore` namespace
