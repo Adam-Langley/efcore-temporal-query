@@ -24,7 +24,7 @@ namespace EntityFrameworkCore.TemporalTables.Query
             Schema = schema;
         }
 
-        public override void Print(ExpressionPrinter expressionPrinter)
+        protected override void Print(ExpressionPrinter expressionPrinter)
         {
             if (!string.IsNullOrEmpty(Schema))
             {
