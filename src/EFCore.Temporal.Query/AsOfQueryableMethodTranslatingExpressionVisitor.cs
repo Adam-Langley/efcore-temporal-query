@@ -33,12 +33,12 @@ namespace EntityFrameworkCore.TemporalTables.Query
         public AsOfQueryableMethodTranslatingExpressionVisitor(
             QueryableMethodTranslatingExpressionVisitorDependencies dependencies,
             RelationalQueryableMethodTranslatingExpressionVisitorDependencies relationalDependencies,
-            IModel model,
+            QueryCompilationContext queryCompilationContext,
             ParameterExpression asOfDateParameter = null
-            ) : base(dependencies, relationalDependencies, model)
+        ) : base(dependencies, relationalDependencies, queryCompilationContext)
         {
             _relationalDependencies = relationalDependencies;
-            _model = model;
+            _model = queryCompilationContext.Model;
             _asOfDateParameter = asOfDateParameter;
 
             var sqlExpressionFactory = relationalDependencies.SqlExpressionFactory;
@@ -53,6 +53,7 @@ namespace EntityFrameworkCore.TemporalTables.Query
                 // attempt to apply the captured date parameter to any select-from-table expressions
                 shapedExpression.TrySetDateParameter(_asOfDateParameter);
             }
+
             return result;
         }
 
