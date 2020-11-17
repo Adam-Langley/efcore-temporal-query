@@ -13,6 +13,7 @@ namespace EntityFrameworkCore.TemporalTables.Query
     {
         public string Name { get; }
         public string Schema { get; }
+
         /// <summary>
         /// Gets and sets the parameter used to constrain a query to a specific temporal period.
         /// </summary>
@@ -35,8 +36,8 @@ namespace EntityFrameworkCore.TemporalTables.Query
         }
 
         public override bool Equals(object obj)
-             // This should be reference equal only.
-             => obj != null && ReferenceEquals(this, obj);
+            // This should be reference equal only.
+            => obj != null && ReferenceEquals(this, obj);
 
         public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), Name, Schema);
     }

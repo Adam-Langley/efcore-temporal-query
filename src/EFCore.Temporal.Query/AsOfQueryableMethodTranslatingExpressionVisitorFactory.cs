@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace EntityFrameworkCore.TemporalTables.Query
 {
-    public class AsOfQueryableMethodTranslatingExpressionVisitorFactory : IQueryableMethodTranslatingExpressionVisitorFactory
+    public class
+        AsOfQueryableMethodTranslatingExpressionVisitorFactory : IQueryableMethodTranslatingExpressionVisitorFactory
     {
         private readonly QueryableMethodTranslatingExpressionVisitorDependencies _dependencies;
         private readonly RelationalQueryableMethodTranslatingExpressionVisitorDependencies _relationalDependencies;
@@ -18,7 +19,8 @@ namespace EntityFrameworkCore.TemporalTables.Query
 
         public QueryableMethodTranslatingExpressionVisitor Create(QueryCompilationContext queryCompilationContext)
         {
-            return new AsOfQueryableMethodTranslatingExpressionVisitor(_dependencies, _relationalDependencies, queryCompilationContext.Model);
+            return new AsOfQueryableMethodTranslatingExpressionVisitor(_dependencies, _relationalDependencies,
+                queryCompilationContext);
         }
     }
 }
